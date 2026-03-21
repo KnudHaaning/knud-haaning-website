@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knud Haaning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────
+       Reset & base
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:      #3d6b8e;
+      --accent-dark: #2e5472;
+      --bg:          #fafaf9;
+      --text:        #1c1c1b;
+      --muted:       #6b7280;
+      --border:      rgba(0, 0, 0, 0.08);
+      --nav-h:       64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─────────────────────────────────────────
+       Navigation
+    ───────────────────────────────────────── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 50;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 56px;
+      background: rgba(250, 250, 249, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.35s ease;
+    }
+    nav.scrolled { border-color: var(--border); }
+
+    .nav-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─────────────────────────────────────────
+       Hero — full-height, centered
+    ───────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--nav-h) 56px 0;
+      position: relative;
+    }
+
+    .hero-inner {
+      max-width: 840px;
+      width: 100%;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(64px, 9.5vw, 118px);
+      font-weight: 300;
+      line-height: 0.96;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+    /* "Haaning" — italic + accent */
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-desc {
+      font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.82;
+      max-width: 530px;
+      margin: 0 0 48px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Scroll hint — bottom-center of hero */
+    .scroll-hint {
+      position: absolute;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.67rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.45;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+    /* Vertical tick below the word */
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 20px;
+      background: currentColor;
+    }
+
+    /* ─────────────────────────────────────────
+       Buttons
+    ───────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 28px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.83rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      border: 1.5px solid transparent;
+      border-radius: 0; /* intentionally square — editorial feel */
+      cursor: pointer;
+      transition:
+        background 0.22s ease,
+        color      0.22s ease,
+        border-color 0.22s ease,
+        transform  0.15s ease;
+    }
+    .btn:hover  { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-filled {
+      background:   var(--accent);
+      color:        #fff;
+      border-color: var(--accent);
+    }
+    .btn-filled:hover {
+      background:   var(--accent-dark);
+      border-color: var(--accent-dark);
+    }
+
+    .btn-outline {
+      background:   transparent;
+      color:        var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color:      #fff;
+    }
+
+    /* ─────────────────────────────────────────
+       Sections — shared layout
+    ───────────────────────────────────────── */
+    .section {
+      padding: 120px 56px;
+      border-top: 1px solid var(--border);
+    }
+    .section-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(28px, 4vw, 50px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .section-text {
+      font-size: 0.98rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.82;
+      max-width: 540px;
+    }
+
+    /* ─────────────────────────────────────────
+       Experience list
+    ───────────────────────────────────────── */
+    .exp-list {
+      margin-top: 48px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 660px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .subsection-heading {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e5e5;
+      margin-bottom: 16px;
+    }
+    .exp-item + .subsection-heading { margin-top: 48px; }
+
+    /* Editorial card */
+    .exp-item {
+      padding: 28px 32px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      /* scroll-in: starts invisible, slides up */
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity    0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform  0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .exp-item.in { opacity: 1; transform: translateY(0); }
+    .exp-item.settled {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .exp-item.settled:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+    }
+
+    /* Card header: logo + text */
+    .exp-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .exp-logo {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #edf2f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+
+    .exp-company {
+      font-size: 0.97rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .exp-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .exp-desc {
+      font-size: 0.87rem;
+      color: var(--muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ─────────────────────────────────────────
+       Chat section CTA
+    ───────────────────────────────────────── */
+    .chat-cta {
+      margin-top: 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .chat-cta .btn {
+      padding: 15px 36px;
+      font-size: 0.87rem;
+    }
+    .chat-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    /* ─────────────────────────────────────────
+       Footer
+    ───────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-size: 0.76rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ─────────────────────────────────────────
+       Animations — fade + rise
+    ───────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity   0.8s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .fade-up.in {
+      opacity:   1;
+      transform: translateY(0);
+    }
+    /* Stagger delays for hero */
+    .d1 { transition-delay: 0.06s; }
+    .d2 { transition-delay: 0.22s; }
+    .d3 { transition-delay: 0.40s; }
+    .d4 { transition-delay: 0.58s; }
+    .d5 { transition-delay: 0.74s; }
+
+    /* ─────────────────────────────────────────
+       Responsive
+    ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav              { padding: 0 24px; }
+      .nav-links       { gap: 24px; }
+      .hero            { padding: var(--nav-h) 24px 0; }
+      .scroll-hint     { bottom: 32px; }
+      .section         { padding: 80px 24px; }
+      footer           { padding: 32px 24px; flex-direction: column; gap: 8px; text-align: center; }
+      .exp-item        { padding: 20px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links       { gap: 16px; }
+      .nav-links a     { letter-spacing: 0.07em; font-size: 0.68rem; }
+      .hero-actions    { flex-direction: column; align-items: center; }
+      .btn             { width: 100%; }
+    }
+
+    /* Reduced-motion: skip transforms, keep fade */
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { transform: none; transition-duration: 0.4s; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav id="nav">
+    <a class="nav-brand" href="#top">KH</a>
+    <ul class="nav-links">
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="knudai.html">Chat</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+
+      <h1 class="hero-name fade-up d1">
+        Knud<em>Haaning</em>
+      </h1>
+
+      <p class="hero-desc fade-up d2">
+        Curious about emerging technologies and driven to build things that matter —
+        I get energised by the space where technology meets real-world problems,
+        and believe the best solutions are always built together.
+      </p>
+
+      <div class="hero-actions fade-up d3">
+        <a href="#experience" class="btn btn-filled">See Experience</a>
+        <a href="knudai.html" class="btn btn-outline">Chat with KnudAI</a>
+      </div>
+
+    </div>
+    <span class="scroll-hint fade-up d5" aria-hidden="true">Scroll</span>
+  </section>
+
+  <!-- ── Experience ── -->
+  <section class="section" id="experience">
+    <div class="section-inner">
+
+      <span class="section-label fade-up">Experience &amp; Education</span>
+
+      <h2 class="section-heading fade-up">
+        Where I've<br>been building.
+      </h2>
+
+      <p class="section-text fade-up">
+        A mix of startup energy, corporate rigour, and hands-on technical work.
+        Every role has taught me something different about how organisations
+        adopt — and resist — new technology.
+      </p>
+
+      <div class="exp-list">
+
+        <h3 class="subsection-heading fade-up">Education</h3>
+
+        <div class="exp-item">
+          <div class="exp-card-header">
+            <div class="exp-logo">CB</div>
+            <div>
+              <p class="exp-company">Copenhagen Business School</p>
+              <p class="exp-meta">BSc Business Administration &amp; Digital Management &middot; Sep 2023 — Jun 2026</p>
+            </div>
+          </div>
+          <p class="exp-desc">GPA 10.7 / 12. The programme integrates business strategy, finance, and IT systems design. Exchange semester at LUISS Guido Carli, Rome — studying Machine Learning in Marketing, Digital Finance, Emerging Technologies, and Ethics for AI.</p>
+        </div>
+
+        <h3 class="subsection-heading fade-up">Professional Experience</h3>
+
+        <div class="exp-item">
+          <div class="exp-card-header">
+            <div class="exp-logo">BM</div>
+            <div>
+              <p class="exp-company">ByggeMate</p>
+              <p class="exp-meta">Co-founder &middot; Jan 2026 — Present</p>
+            </div>
+          </div>
+          <p class="exp-desc">Building a SaaS platform for craftsmen to manage quotes and automate workflows — from user research and product-market fit validation through to database architecture and early customer acquisition.</p>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-card-header">
+            <div class="exp-logo">IN</div>
+            <div>
+              <p class="exp-company">Ingeniøren</p>
+              <p class="exp-meta">Student Assistant, Development &amp; IT &middot; Dec 2024 — Present</p>
+            </div>
+          </div>
+          <p class="exp-desc">Automating internal workflows with n8n, collaborating with the dev team on new feature releases, and translating technical decisions for senior management. Project-led Tech Match Senkarriere from pitch to launch — reaching 14 % of the annual target within two months.</p>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-card-header">
+            <div class="exp-logo">KP</div>
+            <div>
+              <p class="exp-company">KPMG</p>
+              <p class="exp-meta">TechAcademy Participant &middot; Nov 2024 — May 2025</p>
+            </div>
+          </div>
+          <p class="exp-desc">Selected for an exclusive programme exploring RPA, AI, and Quantum Computing — applied across real-world consulting case exercises with KPMG advisors.</p>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-card-header">
+            <div class="exp-logo">ZC</div>
+            <div>
+              <p class="exp-company">Zillion Consulting Group</p>
+              <p class="exp-meta">Associate Partner &middot; May — Dec 2024</p>
+            </div>
+          </div>
+          <p class="exp-desc">B2B sales, C-level relationship development, and pipeline management. Sharpened commercial instincts and learned how to qualify a real opportunity quickly.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Skills ── -->
+  <section class="section" id="projects">
+    <div class="section-inner">
+
+      <span class="section-label fade-up">Skills &amp; Tools</span>
+
+      <h2 class="section-heading fade-up">
+        What I work<br>
+        <em style="font-family:'Playfair Display',serif; font-style:italic; color:var(--accent); font-weight:300;">
+          with.
+        </em>
+      </h2>
+
+      <p class="section-text fade-up">
+        Automation &amp; data: n8n, Python (Pandas, Scikit-learn), Tableau.
+        Product &amp; project: Agile, YouTrack, user research.
+        Business: digital transformation, B2B sales, GDPR compliance.
+        Currently exploring agentic AI, blockchain, and the intersection of the two.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ── Chat ── -->
+  <section class="section" id="chat">
+    <div class="section-inner">
+
+      <span class="section-label fade-up">AI Persona</span>
+
+      <h2 class="section-heading fade-up">
+        Ask me anything —<br>through an AI.
+      </h2>
+
+      <p class="section-text fade-up">
+        KnudAI is a Claude-powered persona that reflects my background, thinking, and
+        experience. Ask it about my projects, how I approach problems, or just have
+        a conversation. It knows my CV better than I do.
+      </p>
+
+      <div class="chat-cta fade-up">
+        <a href="knudai.html" class="btn btn-filled">Start chatting →</a>
+        <span class="chat-note">Powered by Claude · Bring your own API key</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p>Knud Haaning · Copenhagen, Denmark</p>
+    <p>© 2026</p>
+  </footer>
+
+  <script>
+    // ── Nav border on scroll ──────────────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 8);
+    }, { passive: true });
+
+    // ── Fade-in: hero fires immediately on load ───────────────────
+    // Double rAF ensures the browser has painted the initial
+    // opacity:0 state before we add the 'in' class.
+    const heroFades = document.querySelectorAll('.hero .fade-up');
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() =>
+        heroFades.forEach(el => el.classList.add('in'))
+      )
+    );
+
+    // ── Fade-in: all other .fade-up elements via IntersectionObserver ──────
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => {
+      if (!el.closest('.hero')) io.observe(el);
+    });
+
+    // ── Experience cards: slide-in + settle for hover ──────────────
+    // Separate observer so we can add .settled after animation completes.
+    const expIo = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          // After the 0.65s slide-in finishes, enable fast hover transitions
+          setTimeout(() => entry.target.classList.add('settled'), 700);
+          expIo.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+
+    document.querySelectorAll('.exp-item').forEach(el => expIo.observe(el));
+  </script>
+
+</body>
+</html>

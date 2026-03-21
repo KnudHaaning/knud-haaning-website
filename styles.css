@@ -1,0 +1,973 @@
+/* ============================================================
+   Fonts
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+
+/* ============================================================
+   Variables — light mode (default)
+   ============================================================ */
+:root {
+  /* Fixed palette */
+  --navy:        #1b2a4a;
+  --navy-light:  #243559;
+  --gold:        #c9a84c;
+  --gold-light:  #e2c478;
+  --white:       #ffffff;
+
+  /* Themeable tokens */
+  --page-bg:     #f0f0ee;
+  --card-bg:     #ffffff;
+  --text:        #1a1a1a;
+  --text-muted:  #6b7280;
+  --border:      rgba(0, 0, 0, 0.08);
+  --grid-rgba:   rgba(0, 0, 0, 0.04);
+  --hover-ring:  rgba(0, 0, 0, 0.06);
+  --status-green:#15803d;
+
+  /* Constant */
+  --radius-card: 20px;
+  --radius-sm:   10px;
+  --transition:  0.2s ease;
+  --pad-card:    32px;   /* base-8: 4×8 */
+}
+
+/* ============================================================
+   Dark mode (default)
+   ============================================================ */
+[data-theme="dark"] {
+  --page-bg:     #0c0e12;
+  --card-bg:     #111318;
+  --text:        #dde1ea;
+  --text-muted:  #8892a4;   /* bumped from #4e5668 — passes WCAG AA on dark bg */
+  --border:      rgba(255, 255, 255, 0.07);
+  --grid-rgba:   rgba(255, 255, 255, 0.03);
+  --hover-ring:  rgba(255, 255, 255, 0.10);
+  --status-green:#4ade80;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--page-bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* DM Mono for all label / tag / monospace elements */
+.card-label,
+.skill-group-label,
+.hero-eyebrow,
+.knudai-eyebrow,
+.avail-badge,
+.proj-period,
+.proj-tag,
+.skill-tag,
+.lang-tag,
+.location-edu-line,
+.nav-links a,
+.nav-brand,
+.btn {
+  font-family: 'DM Mono', 'SF Mono', ui-monospace, monospace;
+}
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-brand {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.03em;
+  text-decoration: none;
+}
+.nav-brand span { color: var(--gold); }
+
+.nav-links { display: flex; gap: 1.75rem; list-style: none; }
+
+.nav-links a {
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--white); }
+
+/* ============================================================
+   Bento Page Wrapper
+   ============================================================ */
+.bento-page {
+  padding: 24px;   /* base-8: 3×8 */
+}
+
+/* ============================================================
+   Bento Grid — 12 columns
+   ============================================================ */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;   /* base-8: 2×8 */
+  max-width: 1380px;
+  margin: 0 auto;
+}
+
+/* ── Card base ── */
+.bento-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  border: 0.5px solid var(--border);
+  padding: var(--pad-card);
+  overflow: hidden;
+  position: relative;
+  /* load animation */
+  animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* hover prep */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+/* ── Staggered load delays (50 ms per card) ── */
+.bento-card:nth-child(1) { animation-delay:   0ms; }
+.bento-card:nth-child(2) { animation-delay:  50ms; }
+.bento-card:nth-child(3) { animation-delay: 100ms; }
+.bento-card:nth-child(4) { animation-delay: 150ms; }
+.bento-card:nth-child(5) { animation-delay: 200ms; }
+.bento-card:nth-child(6) { animation-delay: 250ms; }
+.bento-card:nth-child(7) { animation-delay: 300ms; }
+.bento-card:nth-child(8) { animation-delay: 350ms; }
+
+/* ── Hover lift — all cards except hero (hero uses JS tilt) ── */
+.bento-card:not(.card-hero):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--hover-ring);
+}
+
+/* ── Hero card — 3-D tilt via JS, preserve depth ── */
+.card-hero {
+  transform-style: preserve-3d;
+}
+
+/* ── Column spans ── */
+.card-hero     { grid-column: span 7; grid-row: span 2; }
+.card-avail    { grid-column: span 5; }
+.card-about    { grid-column: span 5; }
+.card-projects { grid-column: span 8; }
+.card-skills   { grid-column: span 4; }
+.card-contact  { grid-column: span 3; }
+.card-location { grid-column: span 4; }
+.card-knudai   { grid-column: span 5; }
+
+/* ============================================================
+   Hero Card
+   ============================================================ */
+.card-hero {
+  background: var(--navy);
+  border-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 420px;
+}
+
+.hero-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--navy);
+  flex-shrink: 0;
+  margin-bottom: auto;
+}
+
+.hero-body { padding: 32px 0 24px; }  /* base-8 */
+
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.55);  /* raised from 0.35 for readability */
+  margin-bottom: 8px;
+}
+
+.card-hero .card-label {
+  color: rgba(255, 255, 255, 0.28);
+  margin-bottom: 1.5rem;
+}
+
+.hero-name {
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  color: var(--white);
+  margin-bottom: 16px;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+}
+
+.hero-title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);  /* raised from 0.55 for readability */
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.hero-tagline {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.65;
+  max-width: 420px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: opacity var(--transition), transform var(--transition);
+}
+.btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+.btn-light  { background: var(--white);    color: var(--navy); }
+.btn-ghost  { background: rgba(255,255,255,0.12); color: var(--white); }
+.btn-dark   { background: var(--navy);     color: var(--white); }
+.btn-gold   { background: var(--gold);     color: var(--navy); }
+
+/* ============================================================
+   Card label (small section header) — 11px DM Mono, uppercase, tracked
+   ============================================================ */
+.card-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-family: 'DM Mono', 'SF Mono', ui-monospace, monospace;
+}
+
+/* Dark-card variant */
+.card-contact .card-label,
+.card-knudai .card-label { color: rgba(255,255,255,0.35); }
+
+/* ============================================================
+   Availability Card
+   ============================================================ */
+.avail-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+  animation: pulse 2.2s ease infinite;
+}
+
+.status-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--status-green);
+}
+
+.avail-body { display: flex; flex-direction: column; gap: 1rem; }
+
+.avail-role {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.avail-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--page-bg);
+  border: 0.5px solid var(--border);
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.avail-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.avail-company {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* ============================================================
+   About Card
+   ============================================================ */
+.about-text {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.75;
+}
+.about-text--spaced { margin-top: 16px; }
+
+.about-langs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.lang-tag {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--page-bg);
+  border: 0.5px solid var(--border);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Projects Card
+   ============================================================ */
+.proj-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.proj-item {
+  padding: 16px 40px 16px 0;   /* right padding = room for arrow */
+  border-bottom: 0.5px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.18s ease;
+  border-radius: 8px;
+  margin: 0 -8px;
+  padding-left: 8px;
+  padding-right: 48px;
+}
+.proj-item:first-child { padding-top: 0; }
+.proj-item:last-child  { border-bottom: none; }
+
+/* Arrow indicator — slides in on hover */
+.proj-item::after {
+  content: '→';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+  font-size: 1rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+.proj-item:hover {
+  background: var(--page-bg);
+}
+.proj-item:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+.proj-item:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.proj-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.proj-role {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.proj-company {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #8a6820;        /* dark gold — 5.5:1 on white (WCAG AA) */
+  margin-top: 2px;
+}
+[data-theme="dark"] .proj-company {
+  color: var(--gold);    /* original gold — readable on dark card-bg */
+}
+
+.proj-period {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--page-bg);
+  border: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+
+.proj-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.proj-tag {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--page-bg);
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   Skills Card
+   ============================================================ */
+.skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-group-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-tag {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: var(--page-bg);
+  border: 0.5px solid var(--border);
+  color: var(--text);
+}
+
+/* ============================================================
+   Contact Card
+   ============================================================ */
+.card-contact {
+  background: var(--navy);
+  border-color: transparent;
+}
+
+.card-contact .card-label { color: rgba(255,255,255,0.4); }
+
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+.contact-item:hover { opacity: 0.75; }
+
+.contact-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.contact-text {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Location Card
+   ============================================================ */
+.location-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: auto;
+  flex: 1;
+}
+
+.card-location {
+  display: flex;
+  flex-direction: column;
+}
+
+.location-flag { font-size: 2rem; margin-bottom: 8px; }
+
+.location-city {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.location-country {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.location-edu {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 0.5px solid var(--border);
+}
+
+.location-edu-line {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   KnudAI Promo Card
+   ============================================================ */
+.card-knudai {
+  background: var(--navy);
+  border-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.knudai-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.knudai-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.knudai-desc {
+  font-size: 0.83rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.knudai-cta { margin-top: 24px; align-self: flex-start; }
+
+/* ============================================================
+   Animated grid background (body::before)
+   ============================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-rgba) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-rgba) 1px, transparent 1px);
+  background-size: 44px 44px;
+  animation: gridDrift 30s linear infinite;
+}
+
+/* ensure content sits above the pseudo-element */
+nav, main, footer { position: relative; z-index: 1; }
+
+/* ============================================================
+   Theme toggle button
+   ============================================================ */
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.15);
+  color: var(--white);
+}
+
+/* ============================================================
+   Stat numbers (monospaced counters)
+   ============================================================ */
+.stats-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 0.5px solid var(--border);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.stat-num {
+  font-family: 'DM Mono', 'SF Mono', ui-monospace, monospace;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: 'DM Mono', 'SF Mono', ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Keyframes
+   ============================================================ */
+@keyframes gridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 44px 44px, 44px 44px; }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(34,197,94,0.20); }
+  50%       { box-shadow: 0 0 0 6px rgba(34,197,94,0.05); }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+footer {
+  text-align: center;
+  padding: 1.25rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Responsive — tablet: 2 wide columns; mobile: full-width single column
+   ============================================================ */
+
+/* Tablet — 768 px and below */
+@media (max-width: 900px) {
+  .bento {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  /* Every card fills both columns (full-width) */
+  .bento-card {
+    grid-column: span 2 !important;
+    grid-row: auto !important;
+  }
+  .card-hero { min-height: 320px; }
+  .hero-name { font-size: clamp(40px, 8vw, 64px); }
+}
+
+/* Mobile — 600 px and below: true single-column layout */
+@media (max-width: 600px) {
+  .bento-page { padding: 16px; }
+  .bento {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .bento-card {
+    grid-column: span 1 !important;
+    padding: 24px;
+  }
+  .card-hero { min-height: 280px; }
+  .hero-name { font-size: clamp(36px, 10vw, 52px); }
+  .hero-tagline { font-size: 0.88rem; }
+  .stats-row { gap: 16px; }
+  .proj-item { margin: 0; padding-left: 0; }
+}
+
+/* ============================================================
+   KnudAI Chat Page  (knudai.html uses these)
+   ============================================================ */
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px);
+}
+
+.chat-hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: 1.75rem 2rem 1.4rem;
+  text-align: center;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+
+.chat-hero h1 { font-size: 1.7rem; font-weight: 800; margin-bottom: 0.3rem; }
+.chat-hero h1 span { color: var(--gold); }
+.chat-hero p { color: rgba(255,255,255,0.65); font-size: 0.9rem; }
+
+.chat-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  width: 100%;
+  margin: 1.25rem auto;
+  padding: 0 1rem;
+  min-height: 0;
+}
+
+.api-setup {
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.api-setup label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+.api-setup input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.45rem 0.8rem;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.api-setup input:focus { border-color: var(--gold); }
+
+.api-setup .btn { padding: 0.45rem 1rem; font-size: 0.8rem; }
+
+.api-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+.api-status.set   { background: #d1fae5; color: #065f46; }
+.api-status.unset { background: #fee2e2; color: #991b1b; }
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+}
+
+.message {
+  display: flex;
+  gap: 0.65rem;
+  max-width: 85%;
+  animation: fadeUp 0.2s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.message.user { align-self: flex-end; flex-direction: row-reverse; }
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.message.assistant .message-avatar { background: var(--navy); color: var(--gold); }
+.message.user .message-avatar       { background: var(--gold); color: var(--navy); }
+
+.message-bubble {
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.message.assistant .message-bubble {
+  background: var(--page-bg);
+  border: 0.5px solid var(--border);
+  color: var(--text);
+}
+
+.message.user .message-bubble {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.message.assistant.typing .message-bubble {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+  padding-bottom: 0.5rem;
+}
+
+.chat-input-row textarea {
+  flex: 1;
+  padding: 0.65rem 0.9rem;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  min-height: 48px;
+  max-height: 160px;
+  transition: border-color var(--transition);
+  line-height: 1.5;
+  background: var(--white);
+}
+.chat-input-row textarea:focus { border-color: var(--navy); }
+
+.chat-send-btn {
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0 1.1rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: opacity var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chat-send-btn:hover   { opacity: 0.85; }
+.chat-send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
