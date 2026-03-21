@@ -337,6 +337,41 @@
       font-weight: 300;
     }
 
+    /* Card divider — separates two entries inside one card */
+    .exp-divider {
+      border: none;
+      border-top: 1px solid #e5e5e5;
+      margin: 24px 0;
+    }
+
+    /* Bullet points inside a card */
+    .exp-bullets {
+      list-style: none;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .exp-bullets li {
+      font-size: 0.87rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 300;
+      padding-left: 16px;
+      position: relative;
+    }
+    .exp-bullets li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 400;
+    }
+    .exp-bullets li strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
     /* ─────────────────────────────────────────
        Chat section CTA
     ───────────────────────────────────────── */
@@ -478,14 +513,33 @@
         <h3 class="subsection-heading fade-up">Education</h3>
 
         <div class="exp-item">
+
+          <!-- CBS -->
           <div class="exp-card-header">
             <div class="exp-logo">CB</div>
             <div>
-              <p class="exp-company">Copenhagen Business School</p>
-              <p class="exp-meta">BSc Business Administration &amp; Digital Management &middot; Sep 2023 — Jun 2026</p>
+              <p class="exp-company">BSc Business Administration and Digital Management at CBS</p>
+              <p class="exp-meta">September 2023 – June 2026</p>
             </div>
           </div>
-          <p class="exp-desc">GPA 10.7 / 12. The programme integrates business strategy, finance, and IT systems design. Exchange semester at LUISS Guido Carli, Rome — studying Machine Learning in Marketing, Digital Finance, Emerging Technologies, and Ethics for AI.</p>
+          <p class="exp-desc">The BSc in Digital Management integrates core elements of business administration, economics, and finance with a strong focus on digital transformation. The program develops strategic thinking and the design and implementation of IT systems and data-driven solutions to support business innovation and efficiency.</p>
+          <ul class="exp-bullets">
+            <li><strong>Current GPA:</strong> 10.7 / 12 (Danish grading scale)</li>
+            <li><strong>Bachelor project:</strong> The strategic implications of implementing blockchain in highly regulated industries — with the pharmaceutical industry as a case.</li>
+          </ul>
+
+          <hr class="exp-divider" />
+
+          <!-- LUISS -->
+          <div class="exp-card-header">
+            <div class="exp-logo">LU</div>
+            <div>
+              <p class="exp-company">Exchange semester at LUISS Guido Carli in Rome</p>
+              <p class="exp-meta">September 2025 – January 2026</p>
+            </div>
+          </div>
+          <p class="exp-desc">Machine Learning in Marketing, Digital Finance, Emerging Technologies, Ethics for AI, and Macroeconomics.</p>
+
         </div>
 
         <h3 class="subsection-heading fade-up">Professional Experience</h3>
