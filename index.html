@@ -6,8 +6,7 @@
   <title>Knud Haaning</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
     /* ─────────────────────────────────────────
@@ -16,19 +15,20 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --accent:      #3d6b8e;
-      --accent-dark: #2e5472;
-      --bg:          #fafaf9;
-      --text:        #1c1c1b;
-      --muted:       #6b7280;
-      --border:      rgba(0, 0, 0, 0.08);
+      --bg:          #0d1117;
+      --card-bg:     #161b22;
+      --card-border: #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent:      #4d8db8;
+      --accent-glow: rgba(77, 141, 184, 0.15);
       --nav-h:       64px;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -48,18 +48,18 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 56px;
-      background: rgba(250, 250, 249, 0.82);
+      background: rgba(13, 17, 23, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid transparent;
-      transition: border-color 0.35s ease;
+      transition: border-color 0.2s ease;
     }
-    nav.scrolled { border-color: var(--border); }
+    nav.scrolled { border-color: var(--card-border); }
 
     .nav-brand {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 1.2rem;
-      font-weight: 400;
+      font-weight: 700;
       color: var(--accent);
       text-decoration: none;
       letter-spacing: 0.04em;
@@ -71,9 +71,10 @@
       list-style: none;
     }
     .nav-links a {
+      font-family: 'DM Mono', monospace;
       font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.11em;
+      font-weight: 400;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
       text-decoration: none;
@@ -82,7 +83,7 @@
     .nav-links a:hover { color: var(--accent); }
 
     /* ─────────────────────────────────────────
-       Hero — full-height, centered
+       Hero — full-height, centered, dot grid
     ───────────────────────────────────────── */
     .hero {
       min-height: 100vh;
@@ -93,15 +94,23 @@
       justify-content: center;
       padding: var(--nav-h) 56px 0;
       position: relative;
+      overflow: hidden;
     }
 
-    /* FloatingLines canvas */
-    #fl-bg {
+    /* Animated dot grid */
+    .hero::before {
+      content: '';
       position: absolute;
-      inset: 0;
-      z-index: 0;
+      inset: -32px;
+      background-image: radial-gradient(circle, var(--muted) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.15;
       pointer-events: none;
-      overflow: hidden;
+      animation: dotDrift 20s linear infinite;
+    }
+    @keyframes dotDrift {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(32px, 32px); }
     }
 
     .hero-inner {
@@ -112,24 +121,23 @@
     }
 
     .hero-name {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(64px, 9.5vw, 118px);
-      font-weight: 300;
+      font-weight: 700;
       line-height: 0.96;
       letter-spacing: -0.025em;
       color: var(--text);
       margin-bottom: 40px;
     }
-    /* "Haaning" — italic + accent */
     .hero-name em {
-      font-style: italic;
+      font-style: normal;
       color: var(--accent);
       display: block;
     }
 
     .hero-desc {
       font-size: clamp(0.95rem, 1.5vw, 1.08rem);
-      font-weight: 300;
+      font-weight: 400;
       color: var(--muted);
       line-height: 1.82;
       max-width: 530px;
@@ -142,7 +150,7 @@
       flex-wrap: wrap;
     }
 
-    /* Scroll hint — bottom-center of hero */
+    /* Scroll hint */
     .scroll-hint {
       position: absolute;
       bottom: 48px;
@@ -152,17 +160,18 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
+      font-family: 'DM Mono', monospace;
       font-size: 0.67rem;
-      font-weight: 500;
+      font-weight: 400;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--muted);
-      opacity: 0.45;
+      opacity: 0.4;
       pointer-events: none;
       user-select: none;
       white-space: nowrap;
+      z-index: 1;
     }
-    /* Vertical tick below the word */
     .scroll-hint::after {
       content: '';
       display: block;
@@ -179,19 +188,19 @@
       align-items: center;
       justify-content: center;
       padding: 13px 28px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.83rem;
       font-weight: 500;
       letter-spacing: 0.04em;
       text-decoration: none;
       border: 1.5px solid transparent;
-      border-radius: 0; /* intentionally square — editorial feel */
+      border-radius: 0;
       cursor: pointer;
       transition:
-        background 0.22s ease,
-        color      0.22s ease,
-        border-color 0.22s ease,
-        transform  0.15s ease;
+        background   0.2s ease,
+        color        0.2s ease,
+        border-color 0.2s ease,
+        transform    0.2s ease;
     }
     .btn:hover  { transform: translateY(-1px); }
     .btn:active { transform: translateY(0); }
@@ -202,8 +211,8 @@
       border-color: var(--accent);
     }
     .btn-filled:hover {
-      background:   var(--accent-dark);
-      border-color: var(--accent-dark);
+      background:   #5a9ac8;
+      border-color: #5a9ac8;
     }
 
     .btn-outline {
@@ -221,7 +230,7 @@
     ───────────────────────────────────────── */
     .section {
       padding: 120px 56px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--card-border);
     }
     .section-inner {
       max-width: 760px;
@@ -230,8 +239,9 @@
 
     .section-label {
       display: block;
+      font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
-      font-weight: 600;
+      font-weight: 400;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--accent);
@@ -239,18 +249,22 @@
     }
 
     .section-heading {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(28px, 4vw, 50px);
-      font-weight: 300;
+      font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.1;
       color: var(--text);
       margin-bottom: 24px;
     }
+    .section-heading em {
+      font-style: normal;
+      color: var(--accent);
+    }
 
     .section-text {
       font-size: 0.98rem;
-      font-weight: 300;
+      font-weight: 400;
       color: var(--muted);
       line-height: 1.82;
       max-width: 540px;
@@ -269,42 +283,46 @@
     }
 
     .subsection-heading {
+      font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
-      font-weight: 600;
+      font-weight: 400;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
       padding-bottom: 12px;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: 1px solid var(--card-border);
       margin-bottom: 16px;
     }
     .exp-item + .subsection-heading { margin-top: 48px; }
 
-    /* Editorial card */
+    /* Dark card */
     .exp-item {
       padding: 28px 32px;
-      background: #fff;
-      border: 1px solid #e5e5e5;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 6px;
       margin-bottom: 12px;
-      /* scroll-in: starts invisible, slides up */
       opacity: 0;
       transform: translateY(24px);
       transition:
         opacity    0.65s cubic-bezier(0.22, 1, 0.36, 1),
         transform  0.65s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .exp-item.in { opacity: 1; transform: translateY(0); }
     .exp-item.settled {
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transition:
+        transform    0.2s ease,
+        box-shadow   0.2s ease,
+        border-color 0.2s ease;
     }
     .exp-item.settled:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px var(--accent-glow);
     }
 
-    /* Card header: logo + text */
     .exp-card-header {
       display: flex;
       align-items: flex-start;
@@ -317,12 +335,13 @@
       width: 44px;
       height: 44px;
       border-radius: 10px;
-      background: #edf2f7;
+      background: #21262d;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.04em;
       color: var(--accent);
       overflow: hidden;
@@ -345,7 +364,8 @@
     }
 
     .exp-meta {
-      font-size: 0.78rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
       color: var(--muted);
       font-weight: 400;
       line-height: 1.5;
@@ -355,17 +375,15 @@
       font-size: 0.87rem;
       color: var(--muted);
       line-height: 1.75;
-      font-weight: 300;
+      font-weight: 400;
     }
 
-    /* Card divider — separates two entries inside one card */
     .exp-divider {
       border: none;
-      border-top: 1px solid #e5e5e5;
+      border-top: 1px solid var(--card-border);
       margin: 24px 0;
     }
 
-    /* Bullet points inside a card */
     .exp-bullets {
       list-style: none;
       margin-top: 12px;
@@ -377,7 +395,7 @@
       font-size: 0.87rem;
       color: var(--muted);
       line-height: 1.6;
-      font-weight: 300;
+      font-weight: 400;
       padding-left: 16px;
       position: relative;
     }
@@ -390,12 +408,74 @@
     }
     .exp-bullets li strong {
       color: var(--text);
-      font-weight: 500;
+      font-weight: 600;
+    }
+
+    /* ─────────────────────────────────────────
+       Skills — chip groups
+    ───────────────────────────────────────── */
+    .skills-grid {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .skills-group-label {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .skills-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--accent);
+      background: #21262d;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      padding: 6px 14px;
+      white-space: nowrap;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chip:hover {
+      background: var(--accent-glow);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     /* ─────────────────────────────────────────
        Chat section CTA
     ───────────────────────────────────────── */
+    .chat-section-inner {
+      position: relative;
+    }
+
+    .terminal-deco {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.2;
+      line-height: 2;
+      margin-bottom: 32px;
+      pointer-events: none;
+      user-select: none;
+    }
+    .terminal-deco span {
+      display: block;
+    }
+
     .chat-cta {
       margin-top: 48px;
       display: flex;
@@ -408,26 +488,28 @@
       font-size: 0.87rem;
     }
     .chat-note {
-      font-size: 0.78rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
       color: var(--muted);
-      font-weight: 300;
-      font-style: italic;
+      font-weight: 400;
+      font-style: normal;
     }
 
     /* ─────────────────────────────────────────
        Footer
     ───────────────────────────────────────── */
     footer {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--card-border);
       padding: 32px 56px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     footer p {
+      font-family: 'DM Mono', monospace;
       font-size: 0.76rem;
       color: var(--muted);
-      font-weight: 300;
+      font-weight: 400;
     }
 
     /* ─────────────────────────────────────────
@@ -444,7 +526,6 @@
       opacity:   1;
       transform: translateY(0);
     }
-    /* Stagger delays for hero */
     .d1 { transition-delay: 0.06s; }
     .d2 { transition-delay: 0.22s; }
     .d3 { transition-delay: 0.40s; }
@@ -471,9 +552,9 @@
       .btn             { width: 100%; }
     }
 
-    /* Reduced-motion: skip transforms, keep fade */
     @media (prefers-reduced-motion: reduce) {
       .fade-up { transform: none; transition-duration: 0.4s; }
+      .hero::before { animation: none; }
     }
   </style>
 </head>
@@ -492,7 +573,6 @@
 
   <!-- ── Hero ── -->
   <section class="hero" id="top">
-    <div id="fl-bg" aria-hidden="true"></div>
     <div class="hero-inner">
 
       <h1 class="hero-name fade-up d1">
@@ -521,7 +601,7 @@
       <span class="section-label fade-up">Experience &amp; Education</span>
 
       <h2 class="section-heading fade-up">
-        Where I've<br>been building.
+        Where I've<br>been <em>building.</em>
       </h2>
 
       <p class="section-text fade-up">
@@ -621,30 +701,69 @@
       <span class="section-label fade-up">Skills &amp; Tools</span>
 
       <h2 class="section-heading fade-up">
-        What I work<br>
-        <em style="font-family:'Playfair Display',serif; font-style:italic; color:var(--accent); font-weight:300;">
-          with.
-        </em>
+        What I work<br><em>with.</em>
       </h2>
 
-      <p class="section-text fade-up">
-        Automation &amp; data: n8n, Python (Pandas, Scikit-learn), Tableau.
-        Product &amp; project: Agile, YouTrack, user research.
-        Business: digital transformation, B2B sales, GDPR compliance.
-        Currently exploring agentic AI, blockchain, and the intersection of the two.
-      </p>
+      <div class="skills-grid fade-up">
+
+        <div class="skills-group">
+          <span class="skills-group-label">Automation &amp; Data</span>
+          <div class="skills-chips">
+            <span class="chip">n8n</span>
+            <span class="chip">Python</span>
+            <span class="chip">Pandas</span>
+            <span class="chip">Scikit-learn</span>
+            <span class="chip">Tableau</span>
+          </div>
+        </div>
+
+        <div class="skills-group">
+          <span class="skills-group-label">Product &amp; Dev</span>
+          <div class="skills-chips">
+            <span class="chip">Agile</span>
+            <span class="chip">YouTrack</span>
+            <span class="chip">User Research</span>
+            <span class="chip">n8n</span>
+          </div>
+        </div>
+
+        <div class="skills-group">
+          <span class="skills-group-label">Business</span>
+          <div class="skills-chips">
+            <span class="chip">Digital Transformation</span>
+            <span class="chip">B2B Sales</span>
+            <span class="chip">GDPR</span>
+          </div>
+        </div>
+
+        <div class="skills-group">
+          <span class="skills-group-label">Currently Exploring</span>
+          <div class="skills-chips">
+            <span class="chip">Agentic AI</span>
+            <span class="chip">Blockchain</span>
+          </div>
+        </div>
+
+      </div>
 
     </div>
   </section>
 
   <!-- ── Chat ── -->
   <section class="section" id="chat">
-    <div class="section-inner">
+    <div class="section-inner chat-section-inner">
+
+      <div class="terminal-deco fade-up" aria-hidden="true">
+        <span>&gt; initialising KnudAI...</span>
+        <span>&gt; loading persona matrix</span>
+        <span>&gt; mapping experience graph</span>
+        <span>&gt; ready_</span>
+      </div>
 
       <span class="section-label fade-up">AI Persona</span>
 
       <h2 class="section-heading fade-up">
-        Ask me anything —<br>through an AI.
+        Ask me anything —<br>through an <em>AI.</em>
       </h2>
 
       <p class="section-text fade-up">
@@ -675,8 +794,6 @@
     }, { passive: true });
 
     // ── Fade-in: hero fires immediately on load ───────────────────
-    // Double rAF ensures the browser has painted the initial
-    // opacity:0 state before we add the 'in' class.
     const heroFades = document.querySelectorAll('.hero .fade-up');
     requestAnimationFrame(() =>
       requestAnimationFrame(() =>
@@ -699,12 +816,10 @@
     });
 
     // ── Experience cards: slide-in + settle for hover ──────────────
-    // Separate observer so we can add .settled after animation completes.
     const expIo = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in');
-          // After the 0.65s slide-in finishes, enable fast hover transitions
           setTimeout(() => entry.target.classList.add('settled'), 700);
           expIo.unobserve(entry.target);
         }
@@ -712,98 +827,6 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
 
     document.querySelectorAll('.exp-item').forEach(el => expIo.observe(el));
-
-    // ── FloatingLines WebGL background ────────────────────────────
-    (function () {
-      if (typeof THREE === 'undefined') return;
-      const container = document.getElementById('fl-bg');
-      if (!container) return;
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.domElement.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
-      container.appendChild(renderer.domElement);
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-      const uniforms = {
-        uTime:      { value: 0.0 },
-        uMouse:     { value: new THREE.Vector2(0.5, 0.5) },
-        uAmplitude: { value: 0.22 },
-        uFrequency: { value: 3.0 },
-        uSpeed:     { value: 0.25 },
-        uLineWidth: { value: 0.006 },
-        uColorA:    { value: new THREE.Color('#3d6b8e') },
-        uColorB:    { value: new THREE.Color('#7bafd0') },
-      };
-
-      const material = new THREE.ShaderMaterial({
-        uniforms,
-        vertexShader: `
-          varying vec2 vUv;
-          void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
-        `,
-        fragmentShader: `
-          precision highp float;
-          uniform float uTime;
-          uniform vec2  uMouse;
-          uniform float uAmplitude;
-          uniform float uFrequency;
-          uniform float uSpeed;
-          uniform float uLineWidth;
-          uniform vec3  uColorA;
-          uniform vec3  uColorB;
-          varying vec2  vUv;
-
-          void main() {
-            vec2 uv = vUv;
-            uv += (uMouse - vec2(0.5)) * 0.04;
-
-            vec3 col = vec3(0.980, 0.980, 0.976); // #fafaf9
-
-            for (int i = 0; i < 12; i++) {
-              float t     = (float(i) + 0.5) / 12.0;
-              float phase = float(i) * 1.37;
-              float waveY = sin(uv.x * uFrequency + uTime * uSpeed + phase) * uAmplitude;
-              float dist  = abs(uv.y - (t + waveY));
-              float a     = smoothstep(uLineWidth, 0.0, dist);
-              col = mix(col, mix(uColorA, uColorB, t), clamp(a * 0.82, 0.0, 0.82));
-            }
-
-            gl_FragColor = vec4(col, 1.0);
-          }
-        `,
-      });
-
-      scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
-
-      function resize() {
-        const w = container.clientWidth  || window.innerWidth;
-        const h = container.clientHeight || window.innerHeight;
-        renderer.setSize(w, h, false);
-      }
-
-      // Wait one frame so layout is complete before reading dimensions
-      requestAnimationFrame(() => {
-        resize();
-        new ResizeObserver(resize).observe(container);
-
-        window.addEventListener('mousemove', e => {
-          uniforms.uMouse.value.set(
-            e.clientX / window.innerWidth,
-            1.0 - e.clientY / window.innerHeight
-          );
-        }, { passive: true });
-
-        const clock = new THREE.Clock();
-        (function tick() {
-          requestAnimationFrame(tick);
-          uniforms.uTime.value = clock.getElapsedTime();
-          renderer.render(scene, camera);
-        })();
-      });
-    })();
   </script>
 
 </body>
