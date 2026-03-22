@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.min.js"></script>
 
   <style>
     /* ─────────────────────────────────────────
@@ -94,9 +95,20 @@
       position: relative;
     }
 
+    /* FloatingLines canvas */
+    #fl-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
     .hero-inner {
       max-width: 840px;
       width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     .hero-name {
@@ -480,6 +492,7 @@
 
   <!-- ── Hero ── -->
   <section class="hero" id="top">
+    <div id="fl-bg" aria-hidden="true"></div>
     <div class="hero-inner">
 
       <h1 class="hero-name fade-up d1">
@@ -699,6 +712,98 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
 
     document.querySelectorAll('.exp-item').forEach(el => expIo.observe(el));
+
+    // ── FloatingLines WebGL background ────────────────────────────
+    (function () {
+      if (typeof THREE === 'undefined') return;
+      const container = document.getElementById('fl-bg');
+      if (!container) return;
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.domElement.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
+      container.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+      const uniforms = {
+        uTime:      { value: 0.0 },
+        uMouse:     { value: new THREE.Vector2(0.5, 0.5) },
+        uAmplitude: { value: 0.22 },
+        uFrequency: { value: 3.0 },
+        uSpeed:     { value: 0.25 },
+        uLineWidth: { value: 0.006 },
+        uColorA:    { value: new THREE.Color('#3d6b8e') },
+        uColorB:    { value: new THREE.Color('#7bafd0') },
+      };
+
+      const material = new THREE.ShaderMaterial({
+        uniforms,
+        vertexShader: `
+          varying vec2 vUv;
+          void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
+        `,
+        fragmentShader: `
+          precision highp float;
+          uniform float uTime;
+          uniform vec2  uMouse;
+          uniform float uAmplitude;
+          uniform float uFrequency;
+          uniform float uSpeed;
+          uniform float uLineWidth;
+          uniform vec3  uColorA;
+          uniform vec3  uColorB;
+          varying vec2  vUv;
+
+          void main() {
+            vec2 uv = vUv;
+            uv += (uMouse - vec2(0.5)) * 0.04;
+
+            vec3 col = vec3(0.980, 0.980, 0.976); // #fafaf9
+
+            for (int i = 0; i < 12; i++) {
+              float t     = (float(i) + 0.5) / 12.0;
+              float phase = float(i) * 1.37;
+              float waveY = sin(uv.x * uFrequency + uTime * uSpeed + phase) * uAmplitude;
+              float dist  = abs(uv.y - (t + waveY));
+              float a     = smoothstep(uLineWidth, 0.0, dist);
+              col = mix(col, mix(uColorA, uColorB, t), clamp(a * 0.82, 0.0, 0.82));
+            }
+
+            gl_FragColor = vec4(col, 1.0);
+          }
+        `,
+      });
+
+      scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+
+      function resize() {
+        const w = container.clientWidth  || window.innerWidth;
+        const h = container.clientHeight || window.innerHeight;
+        renderer.setSize(w, h, false);
+      }
+
+      // Wait one frame so layout is complete before reading dimensions
+      requestAnimationFrame(() => {
+        resize();
+        new ResizeObserver(resize).observe(container);
+
+        window.addEventListener('mousemove', e => {
+          uniforms.uMouse.value.set(
+            e.clientX / window.innerWidth,
+            1.0 - e.clientY / window.innerHeight
+          );
+        }, { passive: true });
+
+        const clock = new THREE.Clock();
+        (function tick() {
+          requestAnimationFrame(tick);
+          uniforms.uTime.value = clock.getElapsedTime();
+          renderer.render(scene, camera);
+        })();
+      });
+    })();
   </script>
 
 </body>
