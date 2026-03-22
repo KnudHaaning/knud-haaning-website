@@ -128,53 +128,28 @@
     }
 
     /* ─────────────────────────────────────────
-       API key bar
+       Typing indicator dots
     ───────────────────────────────────────── */
-    .api-setup {
-      display: flex;
+    .typing-dots {
+      display: inline-flex;
+      gap: 4px;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 10px 14px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 4px;
-      margin-bottom: 16px;
+      height: 1.2em;
     }
-
-    .api-setup label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      white-space: nowrap;
+    .typing-dots span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+      animation: dotPulse 1.2s ease-in-out infinite;
     }
-
-    .api-setup input {
-      flex: 1;
-      min-width: 160px;
-      border: 1px solid var(--card-border);
-      border-radius: 2px;
-      padding: 6px 10px;
-      font-size: 0.82rem;
-      font-family: 'DM Mono', monospace;
-      color: var(--text);
-      background: var(--bg);
-      outline: none;
-      transition: border-color 0.2s ease;
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotPulse {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1); }
     }
-    .api-setup input:focus { border-color: var(--accent); }
-
-    .api-status {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.72rem;
-      font-weight: 400;
-      white-space: nowrap;
-    }
-    .api-status.set   { color: #3fb950; }
-    .api-status.unset { color: var(--muted); }
 
     /* ─────────────────────────────────────────
        Buttons
@@ -264,6 +239,14 @@
     .message.assistant .message-avatar {
       background: #21262d;
       color: var(--accent);
+      overflow: hidden;
+      padding: 0;
+    }
+    .message.assistant .message-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
     }
     .message.user .message-avatar {
       background: var(--accent);
@@ -363,7 +346,7 @@
   <nav>
     <a class="nav-brand" href="index.html">KH</a>
     <ul class="nav-links">
-      <li><a href="index.html">About</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
       <li><a href="knudai.html" class="active">KnudAI</a></li>
     </ul>
   </nav>
@@ -375,20 +358,13 @@
       <h1 class="chat-title">Knud<em>AI</em></h1>
       <p class="chat-subtitle">An AI persona reflecting Knud — ask me anything about his background, experience, or ideas.</p>
 
-      <div class="api-setup" id="api-setup">
-        <label for="api-key-input">API Key</label>
-        <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off" />
-        <button class="btn btn-primary" onclick="saveKey()">Save</button>
-        <span class="api-status unset" id="api-status">Not set</span>
-        <button class="btn btn-clear" onclick="clearKey()">Clear</button>
-      </div>
     </div>
 
     <div class="chat-wrapper">
 
       <div class="chat-messages" id="chat-messages">
         <div class="message assistant">
-          <div class="message-avatar">KH</div>
+          <div class="message-avatar"><img src="Pictures/Knud Profile foto.jpg" alt="KH" /></div>
           <div class="message-bubble">Hi! I'm KnudAI — an AI persona reflecting Knud Haaning. I can tell you about his background, experience at Ingeniøren, ByggeMate, his studies at CBS, his interests in digital transformation, or anything else you'd like to know. What would you like to talk about?</div>
         </div>
       </div>
@@ -410,125 +386,10 @@
   </div>
 
   <script>
-    // ── System prompt ─────────────────────────────────────────────────────────
-    const SYSTEM_PROMPT = `You are KnudAI, an AI persona reflecting Knud Haaning. You speak in first person as if you are Knud himself — warm, articulate, intellectually curious, and direct. You are ambitious and driven, comfortable taking initiative, and you bridge the gap between technical complexity and business value.
-
-Here is everything you know about yourself:
-
-## Who you are
-- Name: Knud Haaning
-- Based in Copenhagen, Denmark
-- Contact: Haaning.knud@gmail.com | +45 50 44 19 88
-- Languages: Danish (native), English (fluent)
-
-## Education
-- **BSc Business Administration & Digital Management, CBS** (Sep 2023 – Jun 2026)
-  - GPA: 10.7/12 on the Danish grading scale
-  - Bachelor project: The strategic implications of implementing blockchain in highly regulated industries — with the pharmaceutical industry as a case
-  - The programme integrates business administration, economics, finance, and digital transformation — developing strategic thinking and IT systems design
-- **Exchange semester at LUISS Guido Carli, Rome** (Sep 2025 – Jan 2026)
-  - Deliberately chose a technology-focused semester: Machine Learning in Marketing, Digital Finance, Emerging Technologies, Ethics for AI, Macroeconomics
-
-## Professional experience
-
-### Student Assistant — Development & IT, Ingeniøren (Teknologiens Mediehus) · Dec 2024 – Present
-- Automate internal business processes using n8n
-- Collaborate with a Ukrainian development team to design, test, and refine new features
-- Manage and align DPAs in compliance with EU data protection requirements
-- Deliver data-driven presentations to support management decision-making
-
-Selected projects at Ingeniøren:
-- **Tech Match Senkarriere**: Project lead for a new job-matching function on Techjob targeting senior professionals. Managed the full process from ideation and concept development to pitching, securing IDA funding, development, and launch. Reached 14% of the annual target in registered senior profiles within two months.
-- **Ingeniøren International**: Expanding Ingeniøren beyond Denmark with two new publications — The Resilient and The Sidechannel. Prepared the site for the international market, conducted market research, and co-developed and executed the digital go-to-market strategy.
-- **New Subscription Management System**: Project lead for selecting a new subscription management system — mapped system functionality and impacted processes, validated and prioritised requirements, and performed market screening and vendor selection.
-
-### Co-founder, ByggeMate · Jan 2026 – Present
-- Co-founded ByggeMate, a SaaS platform for craftsmen to manage quotes and automate workflows
-- Conducted user interviews to validate product-market fit
-- Led development from ideation to launch and drove early user acquisition
-- Gained practical understanding of database architecture, product development, and commercial thinking required to bring a digital solution to market
-
-### KPMG TechAcademy · Nov 2024 – May 2025
-- Selected for an exclusive programme for tech-driven students exploring the intersection of technology, business, and consulting
-- Four themed sessions: Robotic Process Automation (RPA), Artificial Intelligence, Quantum Computing, and The Future of Technology
-- Applied technologies in real-world case exercises
-
-### Associate Partner, Zillion Consulting Group · May 2024 – Dec 2024
-- Co-managed pipeline operations for the Supply Chain campaign
-- Developed B2B sales experience and relationship-building with C-level executives
-- Analysed and qualified business leads; contributed to sales strategy development
-
-### Early career
-- Waiter, Cafe Wilder (Jun 2023 – Dec 2024) — multitasking in a fast-paced service environment
-- Mail Distributor, Postnord Denmark (Aug 2022 – Feb 2023) — structured, deadline-driven
-- Telemarketer, Per4manZe (Aug 2021 – Mar 2022) — B2B and B2C cold canvassing
-- Sales Assistant, Bilka Hillerød (Aug 2018 – Jun 2021) — customer service and problem-solving
-
-## Skills & tools
-- **Automation & data**: n8n (workflow automation), Python (Pandas, Scikit-learn), Tableau
-- **Product & project**: YouTrack, Agile project management, user research, product development
-- **Business & strategy**: Digital transformation, B2B sales, data-driven decision-making, GDPR/DPA compliance
-- **Tools**: Office 365 (Excel, PowerPoint), Kevel (custom Zerkel queries for banners)
-- **Courses**: Python Foundations (DJØF), Programming for Everybody & Python Data Structures (University of Michigan)
-
-## Travels & volunteering
-- Workaway at Chateau Brandeau, Bordeaux — worked a full harvest season on a vineyard (Aug–Sep 2022)
-- Interrail around Europe — Albania, Kosovo, Bosnia, North Macedonia, Croatia, Greece, Italy, Spain and more (Mar–Jun 2022)
-- Backpacking in Southeast Asia — Thailand, Bali, Vietnam (Feb–Apr 2023)
-- Study start guide at Copenhagen Business School — helped plan the intro week for new students (Aug 2024)
-
-## How you think and communicate
-- You believe that good technology work starts with understanding the human problem first
-- Before explaining anything technical, you try to understand how someone perceives their own reality — then you use concrete examples and analogies drawn from their context
-- You don't start with the solution you want to pitch — you start with the problem they're facing
-- You thrive in fast-paced environments where ideas move quickly to execution
-- You are ambitious and driven, comfortable taking initiative
-- You can pick up new technical tools quickly and apply them in practice (e.g., learned n8n to automate workflows, built a SaaS from scratch)
-- You are interested in AI's future agentic role, blockchain and smart contracts, and the interplay between them for enabling instant automated transactions
-
-## Important notes
-- Always speak as Knud in first person ("I studied...", "In my role at Ingeniøren...")
-- Be genuine, thoughtful, and direct — not a sales pitch
-- If asked something you genuinely don't know (e.g., very personal opinions Knud hasn't expressed), be honest that you're an AI persona and may not have that information
-- Keep answers conversational and appropriately concise — don't write essays unless asked
-- You can discuss topics broadly (technology, business, AI, startups) in the spirit of how Knud would think about them`;
-
     // ── State ─────────────────────────────────────────────────────────────────
-    let messages = [];
+    const WEBHOOK_URL = 'https://ing.app.n8n.cloud/webhook/2e539afa-a945-4ac9-bc90-864d7b5cd13d/chat';
+    const sessionId = crypto.randomUUID();
     let isLoading = false;
-
-    // ── API Key management ────────────────────────────────────────────────────
-    function saveKey() {
-      const val = document.getElementById('api-key-input').value.trim();
-      if (!val.startsWith('sk-ant-')) {
-        alert('That doesn\'t look like a valid Anthropic API key (should start with sk-ant-).');
-        return;
-      }
-      localStorage.setItem('knudai_api_key', val);
-      document.getElementById('api-key-input').value = '';
-      updateKeyStatus();
-    }
-
-    function clearKey() {
-      localStorage.removeItem('knudai_api_key');
-      updateKeyStatus();
-    }
-
-    function getKey() {
-      return localStorage.getItem('knudai_api_key') || '';
-    }
-
-    function updateKeyStatus() {
-      const status = document.getElementById('api-status');
-      const key = getKey();
-      if (key) {
-        status.textContent = 'Key saved ✓';
-        status.className = 'api-status set';
-      } else {
-        status.textContent = 'Not set';
-        status.className = 'api-status unset';
-      }
-    }
 
     // ── Chat logic ────────────────────────────────────────────────────────────
     function handleKey(e) {
@@ -543,14 +404,18 @@ Selected projects at Ingeniøren:
       el.style.height = Math.min(el.scrollHeight, 160) + 'px';
     }
 
-    function appendMessage(role, text, isTyping = false) {
+    function appendMessage(role, text) {
       const container = document.getElementById('chat-messages');
       const div = document.createElement('div');
-      div.className = `message ${role}${isTyping ? ' typing' : ''}`;
+      div.className = 'message ' + role;
 
       const avatar = document.createElement('div');
       avatar.className = 'message-avatar';
-      avatar.textContent = role === 'assistant' ? 'KH' : 'You';
+      if (role === 'assistant') {
+        avatar.innerHTML = '<img src="Pictures/Knud Profile foto.jpg" alt="KH" />';
+      } else {
+        avatar.textContent = 'You';
+      }
 
       const bubble = document.createElement('div');
       bubble.className = 'message-bubble';
@@ -560,7 +425,32 @@ Selected projects at Ingeniøren:
       div.appendChild(bubble);
       container.appendChild(div);
       container.scrollTop = container.scrollHeight;
-      return bubble;
+      return div;
+    }
+
+    function appendTypingIndicator() {
+      const container = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'message assistant typing';
+      div.id = 'typing-indicator';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'message-avatar';
+      avatar.innerHTML = '<img src="Pictures/Knud Profile foto.jpg" alt="KH" />';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'message-bubble';
+      bubble.innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+
+      div.appendChild(avatar);
+      div.appendChild(bubble);
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+      const el = document.getElementById('typing-indicator');
+      if (el) el.remove();
     }
 
     async function sendMessage() {
@@ -568,56 +458,38 @@ Selected projects at Ingeniøren:
       const text = input.value.trim();
       if (!text || isLoading) return;
 
-      const apiKey = getKey();
-      if (!apiKey) {
-        alert('Please enter and save your Anthropic API key first.');
-        return;
-      }
-
       appendMessage('user', text);
-      messages.push({ role: 'user', content: text });
       input.value = '';
       input.style.height = 'auto';
 
       isLoading = true;
       document.getElementById('send-btn').disabled = true;
-      const typingBubble = appendMessage('assistant', 'Thinking…', true);
+      appendTypingIndicator();
 
       try {
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
+        const response = await fetch(WEBHOOK_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: 'claude-opus-4-6',
-            max_tokens: 1024,
-            system: SYSTEM_PROMPT,
-            messages: messages,
+            action: 'sendMessage',
+            sessionId: sessionId,
+            chatInput: text,
           }),
         });
 
+        removeTypingIndicator();
+
         if (!response.ok) {
-          const err = await response.json().catch(() => ({}));
-          const msg = err?.error?.message || `HTTP ${response.status}`;
-          throw new Error(msg);
+          throw new Error('HTTP ' + response.status);
         }
 
         const data = await response.json();
-        const reply = data.content?.[0]?.text || '(No response)';
-
-        typingBubble.textContent = reply;
-        typingBubble.parentElement.classList.remove('typing');
-        messages.push({ role: 'assistant', content: reply });
+        const reply = data.output || '(No response)';
+        appendMessage('assistant', reply);
 
       } catch (err) {
-        typingBubble.textContent = `Error: ${err.message}`;
-        typingBubble.parentElement.classList.remove('typing');
-        typingBubble.style.color = '#f85149';
-        messages.pop();
+        removeTypingIndicator();
+        appendMessage('assistant', "Sorry, I'm having trouble connecting right now. Please try again or contact Knud at haaning.knud@gmail.com or +45 50441988.");
       } finally {
         isLoading = false;
         document.getElementById('send-btn').disabled = false;
@@ -626,7 +498,6 @@ Selected projects at Ingeniøren:
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────
-    updateKeyStatus();
     document.getElementById('chat-input').focus();
   </script>
 
