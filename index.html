@@ -16,8 +16,8 @@
 
     :root {
       --bg:          #0d1117;
-      --card-bg:     #161b22;
-      --card-border: #30363d;
+      --card-bg:     #1c2333;
+      --card-border: #3d4f6b;
       --text:        #e6edf3;
       --muted:       #8b949e;
       --accent:      #4d8db8;
@@ -111,28 +111,31 @@
       font-weight: 700;
       line-height: 0.96;
       letter-spacing: -0.025em;
-      color: var(--text);
+      color: #ffffff;
       margin-bottom: 40px;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.9);
     }
     .hero-name em {
       font-style: normal;
-      color: var(--accent);
+      color: #5fa3d0;
       display: block;
     }
 
     .hero-desc {
       font-size: clamp(0.95rem, 1.5vw, 1.08rem);
       font-weight: 400;
-      color: var(--muted);
+      color: #c9d6e3;
       line-height: 1.82;
       max-width: 530px;
       margin: 0 0 48px;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.9);
     }
 
     .hero-actions {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.9);
     }
 
     /* Scroll hint */
@@ -239,7 +242,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.1;
-      color: var(--text);
+      color: #ffffff;
       margin-bottom: 24px;
     }
     .section-heading em {
@@ -272,7 +275,7 @@
       width: 2px;
       height: 0;
       background: var(--accent);
-      opacity: 0.3;
+      opacity: 0.6;
       transform: translateX(-50%);
       z-index: 1;
     }
@@ -291,7 +294,7 @@
       font-weight: 400;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: #5fa3d0;
       margin-bottom: 8px;
     }
 
@@ -420,7 +423,7 @@
     .tl-date {
       font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
-      color: var(--muted);
+      color: #7a9bbf;
       font-weight: 400;
       white-space: nowrap;
       flex-shrink: 0;
@@ -431,15 +434,14 @@
       font-size: 0.85rem;
       font-weight: 600;
       font-style: italic;
-      color: var(--text);
-      opacity: 0.6;
+      color: #7ab8d4;
       margin: 12px 0 16px;
       line-height: 1.6;
     }
 
     .tl-desc {
       font-size: 0.87rem;
-      color: var(--muted);
+      color: #b0bec5;
       line-height: 1.75;
       font-weight: 400;
     }
@@ -486,6 +488,8 @@
       color: var(--accent);
     }
 
+    .tl-card strong, .tl-card b { color: #ffffff; }
+
     .exp-divider {
       border: none;
       border-top: 1px solid var(--card-border);
@@ -501,7 +505,7 @@
     }
     .exp-bullets li {
       font-size: 0.87rem;
-      color: var(--muted);
+      color: #b0bec5;
       line-height: 1.6;
       font-weight: 400;
       padding-left: 16px;
@@ -816,7 +820,7 @@
 
       <span class="section-label fade-up">Experience &amp; Education</span>
 
-      <h2 class="section-heading fade-up">
+      <h2 class="section-heading" id="tw-experience">
         Where I've<br>been <em>building.</em>
       </h2>
 
@@ -834,7 +838,7 @@
       <!-- ── 01 Education ── -->
       <div class="tl-section-heading">
         <span class="tl-num">01 — Education</span>
-        <h3 class="tl-section-title">Education</h3>
+        <h3 class="tl-section-title" id="tw-edu">Education</h3>
       </div>
 
       <!-- CBS — Left -->
@@ -886,7 +890,7 @@
       <!-- ── 02 Professional Experience ── -->
       <div class="tl-section-heading">
         <span class="tl-num">02 — Professional Experience</span>
-        <h3 class="tl-section-title">Professional Experience</h3>
+        <h3 class="tl-section-title" id="tw-pro">Professional Experience</h3>
       </div>
 
       <!-- Ingeniøren — Left -->
@@ -984,7 +988,7 @@
       <!-- ── 03 Early Career ── -->
       <div class="tl-section-heading">
         <span class="tl-num">03 — Early Career</span>
-        <h3 class="tl-section-title">Early Career</h3>
+        <h3 class="tl-section-title" id="tw-early">Early Career</h3>
       </div>
 
       <!-- Early Career — Left -->
@@ -1043,7 +1047,7 @@
       <!-- ── 04 Volunteering & Travels ── -->
       <div class="tl-section-heading">
         <span class="tl-num">04 — Volunteering &amp; Travels</span>
-        <h3 class="tl-section-title">Volunteering &amp; Travels</h3>
+        <h3 class="tl-section-title" id="tw-vol">Volunteering &amp; Travels</h3>
       </div>
 
       <!-- Volunteering — Right -->
@@ -1094,7 +1098,7 @@
   <section class="section skill-cloud-section" id="projects">
     <div class="section-inner">
       <span class="section-label fade-up">Skills &amp; Tools</span>
-      <h2 class="section-heading fade-up">
+      <h2 class="section-heading" id="tw-skills">
         What I work<br><em>with.</em>
       </h2>
     </div>
@@ -1129,7 +1133,7 @@
 
       <span class="section-label fade-up">AI Persona</span>
 
-      <h2 class="section-heading fade-up">
+      <h2 class="section-heading" id="tw-chat">
         Ask me anything —<br>through an <em>AI.</em>
       </h2>
 
@@ -1220,6 +1224,66 @@
       }
 
       requestAnimationFrame(() => requestAnimationFrame(tick));
+    })();
+
+    // ── Scroll-triggered typewriter for section & timeline headings ──
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var targets = [
+        { id: 'tw-experience', plain: "Where I've\nbeen ", em: 'building.' },
+        { id: 'tw-skills',     plain: "What I work\n",     em: 'with.' },
+        { id: 'tw-chat',       plain: "Ask me anything \u2014\nthrough an ", em: 'AI.' },
+        { id: 'tw-edu',        plain: 'Education',         em: '' },
+        { id: 'tw-pro',        plain: 'Professional Experience', em: '' },
+        { id: 'tw-early',      plain: 'Early Career',      em: '' },
+        { id: 'tw-vol',        plain: 'Volunteering & Travels', em: '' }
+      ];
+
+      function esc(s) { return s.replace(/&/g, '&amp;'); }
+
+      function typewrite(el, plain, em) {
+        var total = plain.length + em.length;
+        var i = 0;
+        el.innerHTML = '';
+        el.style.opacity = '1';
+        function tick() {
+          if (i <= plain.length) {
+            el.innerHTML = esc(plain.slice(0, i)).replace(/\n/g, '<br>') + '<span class="tw-cursor">|</span>';
+          } else {
+            var j = i - plain.length;
+            el.innerHTML = esc(plain).replace(/\n/g, '<br>') + '<em>' + esc(em.slice(0, j)) + '<span class="tw-cursor">|</span></em>';
+          }
+          i++;
+          if (i <= total) {
+            setTimeout(tick, 55);
+          } else {
+            setTimeout(function () {
+              var c = el.querySelector('.tw-cursor');
+              if (c) c.classList.add('hidden');
+            }, 400);
+          }
+        }
+        tick();
+      }
+
+      var twIo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          twIo.unobserve(entry.target);
+          var t = entry.target._twData;
+          if (t) typewrite(entry.target, t.plain, t.em);
+        });
+      }, { threshold: 0.1 });
+
+      targets.forEach(function (t) {
+        var el = document.getElementById(t.id);
+        if (!el) return;
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.2s ease';
+        el._twData = t;
+        twIo.observe(el);
+      });
     })();
 
     // ── Fade-in: all other .fade-up elements via IntersectionObserver ──────
