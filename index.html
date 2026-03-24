@@ -16,8 +16,8 @@
 
     :root {
       --bg:          #0d1117;
-      --card-bg:     #161b22;
-      --card-border: #30363d;
+      --card-bg:     #1c2333;
+      --card-border: #3d4f6b;
       --text:        #e6edf3;
       --muted:       #8b949e;
       --accent:      #4d8db8;
@@ -111,28 +111,31 @@
       font-weight: 700;
       line-height: 0.96;
       letter-spacing: -0.025em;
-      color: var(--text);
+      color: #ffffff;
       margin-bottom: 40px;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.9);
     }
     .hero-name em {
       font-style: normal;
-      color: var(--accent);
+      color: #5fa3d0;
       display: block;
     }
 
     .hero-desc {
       font-size: clamp(0.95rem, 1.5vw, 1.08rem);
       font-weight: 400;
-      color: var(--muted);
+      color: #c9d6e3;
       line-height: 1.82;
       max-width: 530px;
       margin: 0 0 48px;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.9);
     }
 
     .hero-actions {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.9);
     }
 
     /* Scroll hint */
@@ -239,7 +242,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.1;
-      color: var(--text);
+      color: #ffffff;
       margin-bottom: 24px;
     }
     .section-heading em {
@@ -272,7 +275,7 @@
       width: 2px;
       height: 0;
       background: var(--accent);
-      opacity: 0.3;
+      opacity: 0.6;
       transform: translateX(-50%);
       z-index: 1;
     }
@@ -291,7 +294,7 @@
       font-weight: 400;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: #5fa3d0;
       margin-bottom: 8px;
     }
 
@@ -303,44 +306,119 @@
       letter-spacing: -0.02em;
     }
 
-    .tl-item {
+    /* ── Timeline entry: 3-column grid ── */
+    .timeline-entry {
+      display: grid;
+      grid-template-columns: 1fr 40px 14px 40px 1fr;
+      gap: 0 8px;
+      align-items: center;
+      padding-bottom: 48px;
       position: relative;
-      width: 50%;
-      padding-bottom: 40px;
       opacity: 0;
-    }
-
-    .tl-item.tl-left {
-      padding-right: 48px;
-      transform: translateX(-60px);
+      transform: translateX(-50px);
       transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .tl-item.tl-right {
-      margin-left: 50%;
-      padding-left: 48px;
-      transform: translateX(60px);
-      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    .timeline-entry.reverse {
+      transform: translateX(50px);
     }
 
-    .tl-item.in {
+    .timeline-entry.in {
       opacity: 1;
       transform: translateX(0);
     }
 
-    /* Pulse dot */
-    .tl-dot {
-      position: absolute;
-      top: 44px;
+    /* Title info side */
+    .timeline-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .timeline-entry:not(.reverse) .timeline-left {
+      grid-column: 1;
+      text-align: right;
+      align-items: flex-end;
+    }
+
+    .timeline-entry.reverse .timeline-left {
+      grid-column: 5;
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    /* Explicit grid placement */
+    .timeline-entry .timeline-dot { grid-column: 3; }
+    .timeline-entry:not(.reverse) .entry-logo { grid-column: 2; }
+    .timeline-entry.reverse .entry-logo { grid-column: 4; }
+    .timeline-entry:not(.reverse) .timeline-right { grid-column: 4 / 6; }
+    .timeline-entry.reverse .timeline-right { grid-column: 1 / 3; }
+
+    .entry-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: #21262d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .entry-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 4px;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .entry-logo svg {
+      color: var(--accent);
+    }
+    .entry-logo-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+
+    .entry-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: #7a9bbf;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .entry-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    .entry-company {
+      font-size: 0.87rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Center dot */
+    .timeline-dot {
       width: 14px;
       height: 14px;
       border-radius: 50%;
       background: var(--bg);
       border: 2px solid var(--accent);
+      position: relative;
       z-index: 3;
     }
 
-    .tl-dot::after {
+    .timeline-dot::after {
       content: '';
       position: absolute;
       inset: 2px;
@@ -350,7 +428,7 @@
       transition: opacity 0.3s ease;
     }
 
-    .tl-item.in .tl-dot::after {
+    .timeline-entry.in .timeline-dot::after {
       opacity: 1;
       animation: tlDotPulse 2s ease-in-out infinite;
     }
@@ -360,91 +438,39 @@
       50% { opacity: 1; transform: scale(1); }
     }
 
-    .tl-left .tl-dot { right: -7px; }
-    .tl-right .tl-dot { left: -7px; }
-
-    /* Connector */
-    .tl-connector {
-      position: absolute;
-      top: 50px;
-      height: 2px;
-      background: var(--accent);
-      opacity: 0.2;
-    }
-
-    .tl-left .tl-connector { right: 7px; width: 41px; }
-    .tl-right .tl-connector { left: 7px; width: 41px; }
-
-    /* Card */
-    .tl-card {
+    /* Card side */
+    .entry-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 6px;
-      padding: 40px;
-      max-width: 480px;
+      padding: 28px 32px;
       transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
     }
 
-    .tl-left .tl-card { margin-left: auto; }
-
-    .tl-card:hover {
+    .entry-card:hover {
       transform: translateY(-4px);
       border-color: var(--accent);
       box-shadow: 0 8px 32px var(--accent-glow);
     }
 
-    /* Card header */
-    .tl-card-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 6px;
-    }
-
-    .tl-card-info { flex: 1; min-width: 0; }
-
-    .tl-company {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.3;
-    }
-
-    .tl-role {
-      font-size: 0.82rem;
-      color: var(--muted);
-      font-weight: 400;
-      margin-top: 2px;
-    }
-
-    .tl-date {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--muted);
-      font-weight: 400;
-      white-space: nowrap;
-      flex-shrink: 0;
-      padding-top: 4px;
-    }
-
-    .tl-tagline {
+    .entry-tagline {
       font-size: 0.85rem;
       font-weight: 600;
       font-style: italic;
-      color: var(--text);
-      opacity: 0.6;
-      margin: 12px 0 16px;
+      color: #7ab8d4;
+      margin: 0 0 16px;
       line-height: 1.6;
     }
 
-    .tl-desc {
+    .entry-desc {
       font-size: 0.87rem;
-      color: var(--muted);
+      color: #b0bec5;
       line-height: 1.75;
       font-weight: 400;
+      margin: 0;
     }
 
-    .tl-sub-heading {
+    .entry-sub-heading {
       font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
       font-weight: 400;
@@ -486,6 +512,8 @@
       color: var(--accent);
     }
 
+    .entry-card strong, .entry-card b { color: #ffffff; }
+
     .exp-divider {
       border: none;
       border-top: 1px solid var(--card-border);
@@ -501,7 +529,7 @@
     }
     .exp-bullets li {
       font-size: 0.87rem;
-      color: var(--muted);
+      color: #b0bec5;
       line-height: 1.6;
       font-weight: 400;
       padding-left: 16px;
@@ -750,15 +778,39 @@
       .footer-contact  { justify-content: center; }
       /* Timeline mobile */
       .timeline { padding: 0; }
-      .timeline-line { left: 8px; transform: none; }
+      .timeline-line { left: 7px; transform: none; }
       .tl-section-heading { text-align: left; padding-left: 32px; }
-      .tl-item { width: 100%; }
-      .tl-item.tl-left { padding-right: 0; padding-left: 40px; transform: translateX(-40px); }
-      .tl-item.tl-right { margin-left: 0; padding-left: 40px; transform: translateX(-40px); }
-      .tl-left .tl-dot, .tl-right .tl-dot { left: 1px; right: auto; }
-      .tl-left .tl-connector, .tl-right .tl-connector { left: 15px; right: auto; width: 25px; }
-      .tl-left .tl-card { margin-left: 0; }
-      .tl-card { max-width: none; padding: 24px; }
+      .timeline-entry,
+      .timeline-entry.reverse {
+        grid-template-columns: 14px 1fr;
+        gap: 8px 20px;
+        align-items: start;
+        transform: translateY(30px);
+      }
+      .timeline-entry:not(.reverse) .timeline-dot,
+      .timeline-entry.reverse .timeline-dot {
+        grid-column: 1;
+        grid-row: 1 / -1;
+        margin-top: 4px;
+      }
+      .timeline-entry:not(.reverse) .entry-logo,
+      .timeline-entry.reverse .entry-logo {
+        grid-column: 2;
+        grid-row: 1;
+      }
+      .timeline-entry:not(.reverse) .timeline-left,
+      .timeline-entry.reverse .timeline-left {
+        grid-column: 2;
+        grid-row: 2;
+        text-align: left;
+        align-items: flex-start;
+      }
+      .timeline-entry:not(.reverse) .timeline-right,
+      .timeline-entry.reverse .timeline-right {
+        grid-column: 2;
+        grid-row: 3;
+      }
+      .entry-card { padding: 20px 24px; }
     }
 
     @media (max-width: 480px) {
@@ -770,7 +822,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .fade-up { transform: none; transition-duration: 0.4s; }
-      .tl-item.tl-left, .tl-item.tl-right { transform: none; transition-duration: 0.4s; }
+      .timeline-entry, .timeline-entry.reverse { transform: none; transition-duration: 0.4s; }
     }
   </style>
 </head>
@@ -816,7 +868,7 @@
 
       <span class="section-label fade-up">Experience &amp; Education</span>
 
-      <h2 class="section-heading fade-up">
+      <h2 class="section-heading" id="tw-experience">
         Where I've<br>been <em>building.</em>
       </h2>
 
@@ -834,256 +886,268 @@
       <!-- ── 01 Education ── -->
       <div class="tl-section-heading">
         <span class="tl-num">01 — Education</span>
-        <h3 class="tl-section-title">Education</h3>
+        <h3 class="tl-section-title" id="tw-edu">Education</h3>
       </div>
 
-      <!-- CBS — Left -->
-      <div class="tl-item tl-left">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/Logo_CopenhagenBusinessSchool.svg.png" alt="CBS" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Copenhagen Business School</p>
-              <p class="tl-role">BSc Business Administration &amp; Digital Management</p>
-            </div>
-            <span class="tl-date">Sep 2023 — Jun 2026</span>
+      <!-- CBS -->
+      <div class="timeline-entry">
+        <div class="timeline-left">
+          <span class="entry-date">Sep 2023 — Jun 2026</span>
+          <h4 class="entry-title">BSc Business Administration &amp; Digital Management</h4>
+          <p class="entry-company">Copenhagen Business School</p>
+        </div>
+        <div class="entry-logo"><img src="Logos/Logo_CopenhagenBusinessSchool.svg.png" alt="CBS" /></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-tagline">"From business fundamentals to blockchain — building the bridge between strategy and technology."</p>
+            <ul class="exp-bullets">
+              <li>Integrates core business administration, economics, and finance with digital transformation</li>
+              <li><strong>Current GPA:</strong> 10.7 / 12 (Danish grading scale)</li>
+              <li><strong>Bachelor project:</strong> The strategic implications of implementing blockchain in highly regulated industries — with the pharmaceutical industry as a case</li>
+            </ul>
           </div>
-          <p class="tl-tagline">"From business fundamentals to blockchain — building the bridge between strategy and technology."</p>
-          <ul class="exp-bullets">
-            <li>Integrates core business administration, economics, and finance with digital transformation</li>
-            <li><strong>Current GPA:</strong> 10.7 / 12 (Danish grading scale)</li>
-            <li><strong>Bachelor project:</strong> The strategic implications of implementing blockchain in highly regulated industries — with the pharmaceutical industry as a case</li>
-          </ul>
         </div>
       </div>
 
-      <!-- LUISS — Right -->
-      <div class="tl-item tl-right">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/LUISS-Guido-Carli-Italy-logo.png" alt="LUISS" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">LUISS Guido Carli, Rome</p>
-              <p class="tl-role">Exchange Semester</p>
-            </div>
-            <span class="tl-date">Sep 2025 — Jan 2026</span>
+      <!-- LUISS -->
+      <div class="timeline-entry reverse">
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-tagline">"Broadening my lens on AI, finance, and ethics through an international semester."</p>
+            <ul class="exp-bullets">
+              <li>Machine Learning in Marketing</li>
+              <li>Digital Finance</li>
+              <li>Emerging Technologies</li>
+              <li>Ethics for AI</li>
+              <li>Macroeconomics</li>
+            </ul>
           </div>
-          <p class="tl-tagline">"Broadening my lens on AI, finance, and ethics through an international semester."</p>
-          <ul class="exp-bullets">
-            <li>Machine Learning in Marketing</li>
-            <li>Digital Finance</li>
-            <li>Emerging Technologies</li>
-            <li>Ethics for AI</li>
-            <li>Macroeconomics</li>
-          </ul>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="entry-logo"><img src="Logos/LUISS-Guido-Carli-Italy-logo.png" alt="LUISS" /></div>
+        <div class="timeline-left">
+          <span class="entry-date">Sep 2025 — Jan 2026</span>
+          <h4 class="entry-title">Exchange Semester</h4>
+          <p class="entry-company">LUISS Guido Carli, Rome</p>
         </div>
       </div>
 
       <!-- ── 02 Professional Experience ── -->
       <div class="tl-section-heading">
         <span class="tl-num">02 — Professional Experience</span>
-        <h3 class="tl-section-title">Professional Experience</h3>
+        <h3 class="tl-section-title" id="tw-pro">Professional Experience</h3>
       </div>
 
-      <!-- Ingeniøren — Left -->
-      <div class="tl-item tl-left">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/Ing-sort - logo.svg" alt="Ingeniøren" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Ingeniøren</p>
-              <p class="tl-role">Student Assistant, Development &amp; IT</p>
-            </div>
-            <span class="tl-date">Dec 2024 — Present</span>
+      <!-- Ingeniøren -->
+      <div class="timeline-entry">
+        <div class="timeline-left">
+          <span class="entry-date">Dec 2024 — Present</span>
+          <h4 class="entry-title">Student Assistant, Development &amp; IT</h4>
+          <p class="entry-company">Ingeniøren</p>
+        </div>
+        <div class="entry-logo"><img src="Logos/Ing-sort - logo.svg" alt="Ingeniøren" /></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-tagline">"Automating workflows, leading cross-functional projects, and bridging tech and business."</p>
+            <ul class="exp-bullets">
+              <li>Automating internal workflows with n8n</li>
+              <li>Collaborating with the dev team on new feature releases</li>
+              <li>Translating technical decisions for senior management</li>
+            </ul>
+            <h4 class="entry-sub-heading">Selected Projects</h4>
+            <ul class="exp-bullets">
+              <li><strong>Tech Match Senkarriere:</strong> Project lead for a new job-matching function on Techjob targeting senior professionals. Full process from ideation to securing funding from IDA, then development and launch. Reached 14% of annual target within two months.</li>
+              <li><strong>Ingeniøren International:</strong> Expanding Ingeniøren beyond Denmark with two new publications: The Resilient and The Sidechannel. Market research, site preparation, and go-to-market strategy.</li>
+              <li><strong>New Subscription Management System:</strong> Project lead for selecting a new subscription system. Three-step process: mapping functionality, validating requirements, market screening and vendor selection.</li>
+            </ul>
           </div>
-          <p class="tl-tagline">"Automating workflows, leading cross-functional projects, and bridging tech and business."</p>
-          <ul class="exp-bullets">
-            <li>Automating internal workflows with n8n</li>
-            <li>Collaborating with the dev team on new feature releases</li>
-            <li>Translating technical decisions for senior management</li>
-          </ul>
-          <h4 class="tl-sub-heading">Selected Projects</h4>
-          <ul class="exp-bullets">
-            <li><strong>Tech Match Senkarriere:</strong> Project lead for a new job-matching function on Techjob targeting senior professionals. Full process from ideation to securing funding from IDA, then development and launch. Reached 14% of annual target within two months.</li>
-            <li><strong>Ingeniøren International:</strong> Expanding Ingeniøren beyond Denmark with two new publications: The Resilient and The Sidechannel. Market research, site preparation, and go-to-market strategy.</li>
-            <li><strong>New Subscription Management System:</strong> Project lead for selecting a new subscription system. Three-step process: mapping functionality, validating requirements, market screening and vendor selection.</li>
-          </ul>
         </div>
       </div>
 
-      <!-- ByggeMate — Right -->
-      <div class="tl-item tl-right">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/ByggeMate-logo-sort.png" alt="ByggeMate" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">ByggeMate</p>
-              <p class="tl-role">Co-founder</p>
-            </div>
-            <span class="tl-date">Jan 2026 — Present</span>
+      <!-- ByggeMate -->
+      <div class="timeline-entry reverse">
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-tagline">"Co-founding a SaaS platform for craftsmen — from user research to early revenue."</p>
+            <ul class="exp-bullets">
+              <li>Building a SaaS platform for craftsmen to manage quotes and automate workflows</li>
+              <li>User research and product-market fit validation</li>
+              <li>Database architecture and early customer acquisition</li>
+            </ul>
           </div>
-          <p class="tl-tagline">"Co-founding a SaaS platform for craftsmen — from user research to early revenue."</p>
-          <ul class="exp-bullets">
-            <li>Building a SaaS platform for craftsmen to manage quotes and automate workflows</li>
-            <li>User research and product-market fit validation</li>
-            <li>Database architecture and early customer acquisition</li>
-          </ul>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="entry-logo"><img src="Logos/ByggeMate-logo-sort.png" alt="ByggeMate" /></div>
+        <div class="timeline-left">
+          <span class="entry-date">Jan 2026 — Present</span>
+          <h4 class="entry-title">Co-founder</h4>
+          <p class="entry-company">ByggeMate</p>
         </div>
       </div>
 
-      <!-- KPMG — Left -->
-      <div class="tl-item tl-left">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/kpmg_denmark_logo.jpg" alt="KPMG" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">KPMG</p>
-              <p class="tl-role">TechAcademy Participant</p>
-            </div>
-            <span class="tl-date">Nov 2024 — May 2025</span>
+      <!-- KPMG -->
+      <div class="timeline-entry">
+        <div class="timeline-left">
+          <span class="entry-date">Nov 2024 — May 2025</span>
+          <h4 class="entry-title">TechAcademy Participant</h4>
+          <p class="entry-company">KPMG</p>
+        </div>
+        <div class="entry-logo"><img src="Logos/kpmg_denmark_logo.jpg" alt="KPMG" /></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-tagline">"Selected for KPMG's exclusive tech programme — exploring RPA, AI, and Quantum Computing."</p>
+            <ul class="exp-bullets">
+              <li>Exclusive programme exploring RPA, AI, and Quantum Computing</li>
+              <li>Real-world consulting case exercises with KPMG advisors</li>
+            </ul>
           </div>
-          <p class="tl-tagline">"Selected for KPMG's exclusive tech programme — exploring RPA, AI, and Quantum Computing."</p>
-          <ul class="exp-bullets">
-            <li>Exclusive programme exploring RPA, AI, and Quantum Computing</li>
-            <li>Real-world consulting case exercises with KPMG advisors</li>
-          </ul>
         </div>
       </div>
 
-      <!-- Zillion — Right -->
-      <div class="tl-item tl-right">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/zillion_consulting_group.png" alt="Zillion" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Zillion Consulting Group</p>
-              <p class="tl-role">Associate Partner</p>
-            </div>
-            <span class="tl-date">May — Dec 2024</span>
+      <!-- Zillion -->
+      <div class="timeline-entry reverse">
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-tagline">"Sharpening commercial instincts through B2B sales and C-level engagement."</p>
+            <ul class="exp-bullets">
+              <li>B2B sales and C-level relationship development</li>
+              <li>Pipeline management and opportunity qualification</li>
+            </ul>
           </div>
-          <p class="tl-tagline">"Sharpening commercial instincts through B2B sales and C-level engagement."</p>
-          <ul class="exp-bullets">
-            <li>B2B sales and C-level relationship development</li>
-            <li>Pipeline management and opportunity qualification</li>
-          </ul>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="entry-logo"><img src="Logos/zillion_consulting_group.png" alt="Zillion" /></div>
+        <div class="timeline-left">
+          <span class="entry-date">May — Dec 2024</span>
+          <h4 class="entry-title">Associate Partner</h4>
+          <p class="entry-company">Zillion Consulting Group</p>
         </div>
       </div>
 
       <!-- ── 03 Early Career ── -->
       <div class="tl-section-heading">
         <span class="tl-num">03 — Early Career</span>
-        <h3 class="tl-section-title">Early Career</h3>
+        <h3 class="tl-section-title" id="tw-early">Early Career</h3>
       </div>
 
-      <!-- Early Career — Left -->
-      <div class="tl-item tl-left">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/cafe_wilder_logo.jpg" alt="Cafe Wilder" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Cafe Wilder</p>
-              <p class="tl-role">Waiter</p>
-            </div>
-            <span class="tl-date">Jun 2023 — Dec 2024</span>
+      <!-- Cafe Wilder -->
+      <div class="timeline-entry">
+        <div class="timeline-left">
+          <span class="entry-date">Jun 2023 — Dec 2024</span>
+          <h4 class="entry-title">Waiter</h4>
+          <p class="entry-company">Cafe Wilder</p>
+        </div>
+        <div class="entry-logo"><img src="Logos/cafe_wilder_logo.jpg" alt="Cafe Wilder" /></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-desc">Strengthened communication and multitasking skills in a fast-paced service environment.</p>
           </div>
-          <p class="tl-desc">Strengthened communication and multitasking skills in a fast-paced service environment.</p>
+        </div>
+      </div>
 
-          <hr class="exp-divider" />
-
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/postnord_logo.png" alt="Postnord" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Postnord Denmark</p>
-              <p class="tl-role">Mail Distributor</p>
-            </div>
-            <span class="tl-date">Aug 2022 — Feb 2023</span>
+      <!-- Postnord -->
+      <div class="timeline-entry reverse">
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-desc">Independent and structured approach to tasks, enabling consistent delivery on deadlines.</p>
           </div>
-          <p class="tl-desc">Independent and structured approach to tasks, enabling consistent delivery on deadlines.</p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="entry-logo"><img src="Logos/postnord_logo.png" alt="Postnord" /></div>
+        <div class="timeline-left">
+          <span class="entry-date">Aug 2022 — Feb 2023</span>
+          <h4 class="entry-title">Mail Distributor</h4>
+          <p class="entry-company">Postnord Denmark</p>
+        </div>
+      </div>
 
-          <hr class="exp-divider" />
-
-          <div class="tl-card-header">
-            <div class="exp-logo">P4Z</div>
-            <div class="tl-card-info">
-              <p class="tl-company">Per4manZe</p>
-              <p class="tl-role">Telemarketer</p>
-            </div>
-            <span class="tl-date">Aug 2021 — Mar 2022</span>
+      <!-- Per4manZe -->
+      <div class="timeline-entry">
+        <div class="timeline-left">
+          <span class="entry-date">Aug 2021 — Mar 2022</span>
+          <h4 class="entry-title">Telemarketer</h4>
+          <p class="entry-company">Per4manZe</p>
+        </div>
+        <div class="entry-logo"><span class="entry-logo-text">P4Z</span></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-desc">Outbound B2B and B2C sales through cold canvassing. Strengthened communication, empathy, and persuasion skills.</p>
           </div>
-          <p class="tl-desc">Outbound B2B and B2C sales through cold canvassing. Strengthened communication, empathy, and persuasion skills.</p>
+        </div>
+      </div>
 
-          <hr class="exp-divider" />
-
-          <div class="tl-card-header">
-            <div class="exp-logo"><img src="Logos/bilka_loog.jpg" alt="Bilka" /></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Bilka Hillerød</p>
-              <p class="tl-role">Sales Assistant</p>
-            </div>
-            <span class="tl-date">Aug 2018 — Jun 2021</span>
+      <!-- Bilka -->
+      <div class="timeline-entry reverse">
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-desc">Developed strong customer service and independent problem-solving abilities.</p>
           </div>
-          <p class="tl-desc">Developed strong customer service and independent problem-solving abilities.</p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="entry-logo"><img src="Logos/bilka_loog.jpg" alt="Bilka" /></div>
+        <div class="timeline-left">
+          <span class="entry-date">Aug 2018 — Jun 2021</span>
+          <h4 class="entry-title">Sales Assistant</h4>
+          <p class="entry-company">Bilka Hillerød</p>
         </div>
       </div>
 
       <!-- ── 04 Volunteering & Travels ── -->
       <div class="tl-section-heading">
         <span class="tl-num">04 — Volunteering &amp; Travels</span>
-        <h3 class="tl-section-title">Volunteering &amp; Travels</h3>
+        <h3 class="tl-section-title" id="tw-vol">Volunteering &amp; Travels</h3>
       </div>
 
-      <!-- Volunteering — Right -->
-      <div class="tl-item tl-right">
-        <div class="tl-dot"></div>
-        <div class="tl-connector"></div>
-        <div class="tl-card">
-          <div class="tl-card-header">
-            <div class="exp-logo exp-logo-svg"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M12 11v11"/><path d="M4.5 9h15l-1.2-6.5a1 1 0 0 0-1-.5H6.7a1 1 0 0 0-1 .5L4.5 9z"/><path d="M6 9s.5 3 6 3 6-3 6-3"/></svg></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Chateau Brandeau, Bordeaux</p>
-              <p class="tl-role">Workaway</p>
-            </div>
-            <span class="tl-date">Aug — Sep 2022</span>
+      <!-- Chateau Brandeau -->
+      <div class="timeline-entry">
+        <div class="timeline-left">
+          <span class="entry-date">Aug — Sep 2022</span>
+          <h4 class="entry-title">Workaway</h4>
+          <p class="entry-company">Chateau Brandeau, Bordeaux</p>
+        </div>
+        <div class="entry-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M12 11v11"/><path d="M4.5 9h15l-1.2-6.5a1 1 0 0 0-1-.5H6.7a1 1 0 0 0-1 .5L4.5 9z"/><path d="M6 9s.5 3 6 3 6-3 6-3"/></svg></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-desc">Worked on a vineyard during harvest season, involved in the full process from picking grapes to fermentation.</p>
           </div>
-          <p class="tl-desc">Worked on a vineyard during harvest season, involved in the full process from picking grapes to fermentation.</p>
+        </div>
+      </div>
 
-          <hr class="exp-divider" />
-
-          <div class="tl-card-header">
-            <div class="exp-logo exp-logo-svg"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="16" width="22" height="4" rx="1"/><path d="M6 16V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/><path d="M10 16V9"/><path d="M14 16V9"/><path d="M4 20v2"/><path d="M20 20v2"/><circle cx="8" cy="22" r="1"/><circle cx="16" cy="22" r="1"/></svg></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Interrail around Europe</p>
-              <p class="tl-role">Travel</p>
-            </div>
-            <span class="tl-date">Mar — Jun 2022</span>
+      <!-- Interrail -->
+      <div class="timeline-entry reverse">
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-desc">Travelled through Albania, Kosovo, Bosnia and Herzegovina, North Macedonia, Croatia, Greece, Italy, and Spain among others.</p>
           </div>
-          <p class="tl-desc">Travelled through Albania, Kosovo, Bosnia and Herzegovina, North Macedonia, Croatia, Greece, Italy, and Spain among others.</p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="entry-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="16" width="22" height="4" rx="1"/><path d="M6 16V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/><path d="M10 16V9"/><path d="M14 16V9"/><path d="M4 20v2"/><path d="M20 20v2"/><circle cx="8" cy="22" r="1"/><circle cx="16" cy="22" r="1"/></svg></div>
+        <div class="timeline-left">
+          <span class="entry-date">Mar — Jun 2022</span>
+          <h4 class="entry-title">Travel</h4>
+          <p class="entry-company">Interrail around Europe</p>
+        </div>
+      </div>
 
-          <hr class="exp-divider" />
-
-          <div class="tl-card-header">
-            <div class="exp-logo exp-logo-svg"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v6"/><path d="M18 2v6"/><rect x="4" y="8" width="16" height="14" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/><path d="M4 14h16"/><path d="M10 8v6"/><path d="M14 8v6"/></svg></div>
-            <div class="tl-card-info">
-              <p class="tl-company">Backpacking around Southeast Asia</p>
-              <p class="tl-role">Travel</p>
-            </div>
-            <span class="tl-date">Feb — Apr 2023</span>
+      <!-- Backpacking SE Asia -->
+      <div class="timeline-entry">
+        <div class="timeline-left">
+          <span class="entry-date">Feb — Apr 2023</span>
+          <h4 class="entry-title">Travel</h4>
+          <p class="entry-company">Backpacking around Southeast Asia</p>
+        </div>
+        <div class="entry-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v6"/><path d="M18 2v6"/><rect x="4" y="8" width="16" height="14" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/><path d="M4 14h16"/><path d="M10 8v6"/><path d="M14 8v6"/></svg></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-right">
+          <div class="entry-card">
+            <p class="entry-desc">Travelled through Thailand, Bali, and Vietnam.</p>
           </div>
-          <p class="tl-desc">Travelled through Thailand, Bali, and Vietnam.</p>
         </div>
       </div>
 
@@ -1094,7 +1158,7 @@
   <section class="section skill-cloud-section" id="projects">
     <div class="section-inner">
       <span class="section-label fade-up">Skills &amp; Tools</span>
-      <h2 class="section-heading fade-up">
+      <h2 class="section-heading" id="tw-skills">
         What I work<br><em>with.</em>
       </h2>
     </div>
@@ -1129,7 +1193,7 @@
 
       <span class="section-label fade-up">AI Persona</span>
 
-      <h2 class="section-heading fade-up">
+      <h2 class="section-heading" id="tw-chat">
         Ask me anything —<br>through an <em>AI.</em>
       </h2>
 
@@ -1222,6 +1286,66 @@
       requestAnimationFrame(() => requestAnimationFrame(tick));
     })();
 
+    // ── Scroll-triggered typewriter for section & timeline headings ──
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var targets = [
+        { id: 'tw-experience', plain: "Where I've\nbeen ", em: 'building.' },
+        { id: 'tw-skills',     plain: "What I work\n",     em: 'with.' },
+        { id: 'tw-chat',       plain: "Ask me anything \u2014\nthrough an ", em: 'AI.' },
+        { id: 'tw-edu',        plain: 'Education',         em: '' },
+        { id: 'tw-pro',        plain: 'Professional Experience', em: '' },
+        { id: 'tw-early',      plain: 'Early Career',      em: '' },
+        { id: 'tw-vol',        plain: 'Volunteering & Travels', em: '' }
+      ];
+
+      function esc(s) { return s.replace(/&/g, '&amp;'); }
+
+      function typewrite(el, plain, em) {
+        var total = plain.length + em.length;
+        var i = 0;
+        el.innerHTML = '';
+        el.style.opacity = '1';
+        function tick() {
+          if (i <= plain.length) {
+            el.innerHTML = esc(plain.slice(0, i)).replace(/\n/g, '<br>') + '<span class="tw-cursor">|</span>';
+          } else {
+            var j = i - plain.length;
+            el.innerHTML = esc(plain).replace(/\n/g, '<br>') + '<em>' + esc(em.slice(0, j)) + '<span class="tw-cursor">|</span></em>';
+          }
+          i++;
+          if (i <= total) {
+            setTimeout(tick, 55);
+          } else {
+            setTimeout(function () {
+              var c = el.querySelector('.tw-cursor');
+              if (c) c.classList.add('hidden');
+            }, 400);
+          }
+        }
+        tick();
+      }
+
+      var twIo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          twIo.unobserve(entry.target);
+          var t = entry.target._twData;
+          if (t) typewrite(entry.target, t.plain, t.em);
+        });
+      }, { threshold: 0.1 });
+
+      targets.forEach(function (t) {
+        var el = document.getElementById(t.id);
+        if (!el) return;
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.2s ease';
+        el._twData = t;
+        twIo.observe(el);
+      });
+    })();
+
     // ── Fade-in: all other .fade-up elements via IntersectionObserver ──────
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -1238,7 +1362,7 @@
 
     // ── Timeline: directional slide-in + progressive line drawing ──
     (function () {
-      var tlItems = document.querySelectorAll('.tl-item');
+      var tlItems = document.querySelectorAll('.timeline-entry');
       if (!tlItems.length) return;
 
       var tlLine = document.getElementById('timeline-line');
